@@ -27,7 +27,7 @@ public class StandardFragment extends Fragment{
     private Boolean isFutureOperationButtonClicked = false;
     private Boolean isInstantOperationButtonClicked = false;
     private Boolean isEqualButtonClicked = false;
-
+    private Boolean isEqualEx = false;
     private Double currentNumber = 0.0; // Value can be changed.
     private Double currentResult = 0.0;
     private Double memory = 0.0;
@@ -328,17 +328,18 @@ public class StandardFragment extends Fragment{
                 if (isFutureOperationButtonClicked) {
                     currentNumber = currentResult;
                 }
-
+                String temp = textViewHistoryText.getText().toString();
+                String temp1 = textViewCurrentNumber.getText().toString();
+                textViewHistoryText.setText((CharSequence)(temp + temp1 + "="));
                 String historyAllText = calculateResult();
                 Toast.makeText(getContext().getApplicationContext(), (CharSequence)historyAllText, Toast.LENGTH_LONG).show();
                 historyActionList.add(historyAllText);
                 String var10001 = formatDoubleToString(currentResult);
                 Intrinsics.checkNotNullExpressionValue(var10001, "StringBuilder().append(f…urrentResult)).toString()");
                 historyText = var10001;
-                textViewHistoryText.setText((CharSequence)"");
                 isFutureOperationButtonClicked = false;
                 isEqualButtonClicked = true;
-
+                isEqualEx = true;
             }
         });
 
@@ -447,12 +448,6 @@ public class StandardFragment extends Fragment{
 
         this.currentNumber = this.formatStringToDouble(currentValue);
 
-//        try {
-//            this.currentNumber = this.formatStringToDouble(currentValue);
-//        } catch (ParseException var5) {
-//            throw (Throwable)(new IllegalArgumentException("String must be number."));
-//        }
-
         this.textViewCurrentNumber.setText((CharSequence)currentValue);
         if (this.isEqualButtonClicked) {
             this.currentOperation = this.INIT;
@@ -469,16 +464,11 @@ public class StandardFragment extends Fragment{
         this.isEqualButtonClicked = false;
     }
 
-    // $FF: synthetic method
-//    static void onNumberButtonClick$default(MainActivity var0, String var1, boolean var2, int var3, Object var4) throws IllegalArgumentException {
-//        if ((var3 & 2) != 0) {
-//            var2 = false;
-//        }
-//
-//        var0.onNumberButtonClick(var1, var2);
-//    }
-
     private final void onFutureOperationButtonClick(String operation) {
+        if(isEqualEx==true) {
+            textViewHistoryText.setText((CharSequence)"");
+            isEqualEx=false;
+        }
         if (!isFutureOperationButtonClicked && !isEqualButtonClicked) {
             calculateResult();
         }
@@ -497,7 +487,7 @@ public class StandardFragment extends Fragment{
     private final void onInstantOperationButtonClick(String operation) {
         String currentValue = this.textViewCurrentNumber.getText().toString();
         double thisOperationNumber = this.formatStringToDouble(currentValue);
-        currentValue = '(' + this.formatDoubleToString(thisOperationNumber) + ')';
+        currentValue = '(' + this.formatDoubleToString(thisOperationNumber) + ")=";
         if (Intrinsics.areEqual(operation, this.PERCENTAGE)) {
             thisOperationNumber = thisOperationNumber / (double)100;
             currentValue = this.formatDoubleToString(thisOperationNumber);
@@ -511,7 +501,7 @@ public class StandardFragment extends Fragment{
 
         String var10001;
         if (this.isInstantOperationButtonClicked) {
-            this.historyInstantOperationText = '(' + this.historyInstantOperationText + ')';
+            this.historyInstantOperationText = '(' + this.historyInstantOperationText + ")";
             var10001 = operation + this.historyInstantOperationText;
             Intrinsics.checkNotNullExpressionValue(var10001, "StringBuilder().append(o…OperationText).toString()");
             this.historyInstantOperationText = var10001;
@@ -617,67 +607,16 @@ public class StandardFragment extends Fragment{
         this.textViewCurrentNumber.setText((CharSequence)this.formatDoubleToString(newNumber));
     }
 
-    // $FF: synthetic method
-//    static void clearEntry$default(MainActivity var0, double var1, int var3, Object var4) {
-//        if ((var3 & 1) != 0) {
-//            var1 = 0.0D;
-//        }
-//
-//        var0.clearEntry(var1);
-//    }
-
 //    Tao History
 //    public boolean onCreateOptionsMenu(@org.jetbrains.annotations.Nullable Menu menu) {
 //        this.getMenuInflater().inflate(1400000, menu);
 //        return super.onCreateOptionsMenu(menu);
-//    }
-//
-//    public boolean onOptionsItemSelected(@org.jetbrains.annotations.Nullable MenuItem item) {
-//        Integer var2 = item != null ? item.getItemId() : null;
-//        int var3 = 1000171;
-//        if (var2 != null) {
-//            if (var2 == var3) {
-//                HistoryActionListDialogFragment.Companion.newInstance(this.historyActionList).show(this.getSupportFragmentManager(), "dialog");
-//                return true;
-//            }
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    public void onHistoryItemClicked(@NotNull String resultText) {
-//        Intrinsics.checkNotNullParameter(resultText, "resultText");
-//
-//        try {
-//            this.onNumberButtonClick(resultText, true);
-//        } catch (IllegalArgumentException var3) {
-//            return;
-//        }
-//
-//        Toast.makeText(this.getApplicationContext(), (CharSequence)(this.getString(1900066) + resultText), 0).show();
-//    }
-
-//    @NotNull
-//    public final Lazy bind(@NotNull final Activity $this$bind, @IdRes final int idRes) {
-//        Intrinsics.checkNotNullParameter($this$bind, "$this$bind");
-//        return LazyKt.lazy(LazyThreadSafetyMode.NONE, (Function0)(new Function0() {
-//            // $FF: synthetic method
-//            // $FF: bridge method
-//            public Object invoke() {
-//                return this.invoke();
-//            }
-//
-//            public final View invoke() {
-//                return $this$bind.findViewById(idRes);
-//            }
-//        }));
 //    }
 
 //    public MainActivity() {
 //        this.currentOperation = this.INIT;
 //    }
 
-    // $FF: synthetic method
     public static final void access$setHistoryActionList$p(ArrayList var1) {
         historyActionList = var1;
     }

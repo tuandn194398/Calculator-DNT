@@ -839,8 +839,9 @@ public class ScientificFragment extends Fragment implements View.OnClickListener
 
         if (v.getId() == R.id.close_Btn){
             String s = SCCalculation.getText().toString();
-            if(checkPar(s) > 0){
-                s += ")";
+            String s1 = SCResult.getText().toString();
+            if(checkPar(s) > 0) {
+                s = s + s1 + ")";
                 SCCalculation.setText(s);
                 updateInput();
             }
@@ -1720,19 +1721,23 @@ public class ScientificFragment extends Fragment implements View.OnClickListener
 
     public void updateInput(){
         String s = SCCalculation.getText().toString();
-        if(s.charAt(s.length()-1) == ')'){
-            int n = checkPar(s);
-            int i;
-            int cnt = 0;
-            for(i=0;i<s.length();i++){
-                if(s.charAt(i) == '(') cnt++;
-                if(cnt == n+1) break;
+        try {
+            if(s.charAt(s.length()-1) == ')'){
+                int n = checkPar(s);
+                int i;
+                int cnt = 0;
+                for(i=0;i<s.length();i++){
+                    if(s.charAt(i) == '(') cnt++;
+                    if(cnt == n+1) break;
+                }
+                input = s.substring(i);
+                double d = eval(input);
+                SCResult.setText(Double.toString(d));
+            }else{
+                throw new RuntimeException("??????");
             }
-            input = s.substring(i);
-            double d = eval(input);
-            SCResult.setText(Double.toString(d));
-        }else{
-            throw new RuntimeException("??????");
+        }catch (Exception ex){
+            SCResult.setText("16156");
         }
     }
 

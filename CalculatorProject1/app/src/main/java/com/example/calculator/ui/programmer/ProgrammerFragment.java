@@ -70,7 +70,6 @@ public class ProgrammerFragment extends Fragment implements View.OnClickListener
         Button btnMinus = view.findViewById(R.id.subBtn);
         Button btnBackspace = view.findViewById(R.id.deleteBtn);
         Button btnCE = view.findViewById(R.id.cBtn);
-        Button btnChangeOP = view.findViewById(R.id.ps_Btn);
         Button btnRpar = view.findViewById(R.id.closeBtn);
         Button btnLpar = view.findViewById(R.id.openBtn);
         ImageButton btnRshift = view.findViewById(R.id.it_btnRshift);
@@ -668,12 +667,12 @@ public class ProgrammerFragment extends Fragment implements View.OnClickListener
             @Override
             public void onClick(View view) {
                 String s = Calculation.getText().toString();
+                String s1 = Result.getText().toString();
                 if(checkPar(s) > 0){
-                    s += ")";
+                    s = s + s1 + ")";
                     Calculation.setText(s);
                     updateInput();
-                    Result.setText(Double.toString(eval(input)));
-                    show();
+//                    Result.setText(Double.toString(eval(input)));
                 }
             }
         });
@@ -953,20 +952,25 @@ public class ProgrammerFragment extends Fragment implements View.OnClickListener
 
     public void updateInput(){
         String s = Calculation.getText().toString();
-        if(s.charAt(s.length()-1) == ')'){
-            long n = checkPar(s);
-            int i;
-            long cnt = 0;
-            for(i=0;i<s.length();i++){
-                if(s.charAt(i) == '(') cnt++;
-                if(cnt == n+1) break;
+        try {
+            if (s.charAt(s.length() - 1) == ')') {
+                long n = checkPar(s);
+                int i;
+                long cnt = 0;
+                for (i = 0; i < s.length(); i++) {
+                    if (s.charAt(i) == '(') cnt++;
+                    if (cnt == n + 1l) break;
+                }
+                input = s.substring(i);
+//                Result.setText(Double.toString(eval(input)));
+                String d = solve(input);
+                Result.setText(d);
+                show();
+            } else {
+                throw new RuntimeException("??????");
             }
-            input = s.substring(i);
-            String d = solve(input);
-            Result.setText(d);
-            show();
-        }else{
-            throw new RuntimeException("??????");
+        }catch (Exception ex){
+            Result.setText("16156");
         }
     }
 
@@ -1073,13 +1077,11 @@ public class ProgrammerFragment extends Fragment implements View.OnClickListener
                 btnE.setEnabled(false);
                 btnF.setEnabled(false);
                 if (heSo <= 8) {
-//            setBtnEnabled();
                     btnEight.setTextColor(Color.parseColor("#D3D3D3"));
                     btnNine.setTextColor(Color.parseColor("#D3D3D3"));
                     btnEight.setEnabled(false);
                     btnNine.setEnabled(false);
                     if (heSo <= 2) {
-//            setBtnEnabled();
                         btnTwo.setTextColor(Color.parseColor("#D3D3D3"));
                         btnThree.setTextColor(Color.parseColor("#D3D3D3"));
                         btnFour.setTextColor(Color.parseColor("#D3D3D3"));
